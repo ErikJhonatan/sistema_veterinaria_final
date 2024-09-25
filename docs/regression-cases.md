@@ -10,3 +10,4 @@ Prepared for this change. **Not executed.** Tests, manual checks, lint and build
 | References | Submit bonus create/delete and employee evaluation form | References match real controller methods and unique route names |
 | Attendance fields | Unknown QR employee; existing employee marks arrival/lunch/departure | Unknown employee rejected; queries use Empleado and formatted time strings |
 | PDF aliases | Generate both legacy PDF URL and canonical comprobantes.pdf link | Different route names resolve without collision |
+| Home alias | Resolve /home by URL and named route home | One redirect to /dashboard; no competing controller route |
