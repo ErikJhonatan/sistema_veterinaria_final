@@ -502,7 +502,7 @@ $exists = Evalution_employes::where('employe_id', $request->id)
                  try {
                     $A = new Asistencia();
                     $A->Comienzo_trabajo = date('H:i:s');
-                    $Retraso = Employes::where('id',$Empleado)->value('start_work');
+                    $Retraso = Employes::where('id',$Empleado)->value('start_working_hours');
                     $HoraActual = new \DateTime(date('H:i:s'));
                     $Retraso = new \DateTime($Retraso);
                     if($HoraActual > $Retraso){
@@ -524,6 +524,9 @@ $exists = Evalution_employes::where('employe_id', $request->id)
             case 'Almuerzo':
             $Empleado = Employes::where('email',$request->qr_code)->value('id');
             $Hoy = date('Y-m-d');
+            if (!Asistencia::where('Empleado', $Empleado)->whereDate('created_at', $Hoy)->exists()) {
+                return redirect()->route('Asistencia')->with('Menss',6);
+            }
             $HoraActual = date('H:i:s');
             $Almuerzo = Asistencia::where('Empleado', $Empleado)
             ->where('Inicio_Almuerzo', '!=', 'No posee')
@@ -571,7 +574,7 @@ $exists = Evalution_employes::where('employe_id', $request->id)
                 ->whereDate('created_at', $Hoy)
                 ->exists();
                 if($Salida){
-                    $Retraso = Employes::where('id',$Empleado)->value('end_work');
+                    $Retraso = Employes::where('id',$Empleado)->value('end_working_hours');
                     $HoraActual = new \DateTime(date('H:i:s'));
                     $Retraso = new \DateTime($Retraso);
                     if($HoraActual > $Retraso){
