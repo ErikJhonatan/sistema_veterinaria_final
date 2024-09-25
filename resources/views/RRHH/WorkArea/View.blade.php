@@ -17,7 +17,7 @@
         @foreach($WorkArea as $a)
             <tr>
                 <td>{{ $a->name }}</td>
-                <td><a href="{{ url('/RRHH/Work/Area/Delete') }}/{{ $a->id }}" ><i class="fa-solid fa-trash" style="color: #f40101;" title="Eliminar Area"></i></a>&nbsp;&nbsp;<a href="{{ url('/RRHH/Work/Area/Edit') }}/{{ $a->id }}"><i class="fa fa-edit" title="Editar Area" style="color:rgb(51, 221, 51)"></i></a></td>
+                <td><form method="POST" action="{{ url('/RRHH/Work/Area/Delete') }}/{{ $a->id }}" class="d-inline">@csrf @method('DELETE')<button type="submit"  aria-label="Eliminar"><i class="fa-solid fa-trash" style="color: #f40101;" title="Eliminar Area"></i></button></form>&nbsp;&nbsp;<a href="{{ url('/RRHH/Work/Area/Edit') }}/{{ $a->id }}"><i class="fa fa-edit" title="Editar Area" style="color:rgb(51, 221, 51)"></i></a></td>
                 
             </tr>
         @endforeach

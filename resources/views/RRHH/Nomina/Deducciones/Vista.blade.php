@@ -19,7 +19,7 @@
             <tr>
                 <td>{{ $d->nombre }}</td>
                 <td>{{ $d->porcentage}}%</td>
-                <td><a href="{{ url('/RRHH/Nomina/Dedduccion/Delete') }}/{{ $d->id }}"  title="Eliminar Dedducion"><i class="fa fa-trash" style="color:red"></i> </a></td>
+                <td><form method="POST" action="{{ url('/RRHH/Nomina/Dedduccion/Delete') }}/{{ $d->id }}" class="d-inline">@csrf @method('DELETE')<button type="submit"  title="Eliminar Dedducion" aria-label="Eliminar"><i class="fa fa-trash" style="color:red"></i> </button></form></td>
                 
             </tr>
         @endforeach

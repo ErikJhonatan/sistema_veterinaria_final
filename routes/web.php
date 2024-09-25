@@ -82,7 +82,7 @@ Route::middleware(['auth'])->group(function () {
     //Route::resource('/evento', EventoController::class);
     Route::get('/evento', [EventoController::class, 'index'])->middleware(['auth', 'verified']);
     Route::get('/evento/list', [EventoController::class, 'list'])->middleware(['auth', 'verified']);
-    Route::get('/evento/destroy/{id}', [EventoController::class, 'destroy'])->name('evento.destroy')->middleware(['auth', 'verified']);
+    Route::delete('/evento/destroy/{id}', [EventoController::class, 'destroy'])->name('evento.destroy')->middleware(['auth', 'verified']);
 
     Route::resource('/formaPago', FormaPagoController::class);
     Route::resource('/linea', LineaController::class);
@@ -112,7 +112,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/RRHH/Work/Areas',[RRHHController::class, 'WorkAreaIndex'])->name('WorkAreaIndex');
     Route::get('/RRHH/Work/Areas/Create',[RRHHController::class, 'WorkAreaCreate'])->name('CreateWorkArea');
     Route::post('/RRHH/Work/Areas/Create/Form',[RRHHController::class, 'WorkAreaCreateForm'])->name('CreateWorkAreaForm');
-    Route::get('/RRHH/Work/Area/Delete/{id}',[RRHHController::class,'WorkAreaDelete']);
+    Route::delete('/RRHH/Work/Area/Delete/{id}',[RRHHController::class,'WorkAreaDelete']);
     Route::get('/RRHH/Work/Area/Edit/{id}',[RRHHController::class,'WorkAreaEdit']);
     Route::post('/RRHH/Work/Area/Edit/Form',[RRHHController::class,'WorkAreaEditForm'])->name('EditWorkAreaForm');
     Route::post('/RRHH/Create/Employe/Form',[RRHHController::class,'CreateEmployeForm'])->name('CreateEmployeForm');
@@ -120,23 +120,23 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/RRHH/Employes/Edit/{id}',[RRHHController::class,'EditEmploye']);
     Route::get('/RRHH/Employes/Evaluate/{id}',[RRHHController::class,'EvaluateEmploye']);
     Route::get('/RRHH/Work/Nomina/Bonificaciones',[RRHHController::class,'FormularioBonificaciones'])->name('Bonificacion');
-    Route::post('/RRHH/Nomina/Bonificaciones',[RRHHController::class,'CrearBonificacion'])->name('CrearBonificacion');
+    Route::post('/RRHH/Nomina/Bonificaciones',[RRHHController::class,'CrearBonificaciones'])->name('CrearBonificacion');
     Route::get('/RRHH/Nomina/Bonificaicon/Vista',[RRHHController::Class,'VistaBonificacion'])->name('VistaBonificaciones');
-    Route::get('/RRHH/Nomina/Bonificaciones/Delete/{id}',[RRHHController::class, 'ElimianrBonificacion']);
+    Route::delete('/RRHH/Nomina/Bonificaciones/Delete/{id}',[RRHHController::class, 'ElimianrBonificaciones']);
     Route::get('/RRHH/Work/Nomina/Deduccion',[RRHHController::class,'FormularioDeduciones'])->name('Deduciones');
     Route::post('/RRHH/Nomina/Deduciones',[RRHHController::class,'CrearDeduccion'])->name('CrearDeduccion');
-    Route::get('/RRHH/Nomina/Dedduccion/Delete/{id}',[RRHHController::class, 'ElimianrDedduccion']);
+    Route::delete('/RRHH/Nomina/Dedduccion/Delete/{id}',[RRHHController::class, 'ElimianrDedduccion']);
     Route::get('/RRHH/Nomina/Dedduccion/Vista',[RRHHController::Class,'VistaDedduciones'])->name('VistaDeducciones');
-    Route::post('/RRHH/Employes/Evaluate/Form',[RRHHController::class,'EvaluateEmployeForm'])->name('EvaluateEmploye');
+    Route::post('/RRHH/Employes/Evaluate/Form',[RRHHController::class,'EvaluateEmployeForm'])->name('EvaluateEmployeForm');
     Route::get('/RRHH/View/Evaluations/{id}',[RRHHController::class, 'ViewEvaluations']);
     Route::get('/RRHH/Evalution/View/Table/{id}',[RRHHController::class,'EvaluationTable']);
     Route::get('/RRHH/Work/Organigrama',[RRHHController::class, 'OrganigramaView']);
     Route::get('/graficos-ventas', [VentasController::class, 'graficos']);
 
-    Route::get('/comprobantes/generar-pdf/{comprobante_id}', [ComprobantesController::class, 'pdf'])->name('comprobantes.pdf')->middleware('auth', 'verified');
+    Route::get('/comprobantes/generar-pdf/{comprobante_id}', [ComprobantesController::class, 'pdf'])->name('comprobantes.pdf.legacy')->middleware(['auth', 'verified']);
     Route::get('/comprobantes/{comprobante_id}/pdf', [ComprobantesController::class, 'pdf'])->name('comprobantes.pdf');
-    Route::post('/comprobantes/agregar-pago', [ComprobantesController::class, 'ajax'])->name('comprobantes.ajax')->middleware('auth', 'verified');
-    Route::post('/stocks/agregar-stock', [StocksController::class, 'ajax'])->name('stocks.ajax')->middleware('auth', 'verified');
+    Route::post('/comprobantes/agregar-pago', [ComprobantesController::class, 'ajax'])->name('comprobantes.ajax')->middleware(['auth', 'verified']);
+    Route::post('/stocks/agregar-stock', [StocksController::class, 'ajax'])->name('stocks.ajax')->middleware(['auth', 'verified']);
 
     Route::get('/getProvincias/{Depto}',[ClienteController::class,'getProvincias'])->middleware(['auth', 'verified']);
     Route::get('/getDistritos/{Prov}',[ClienteController::class,'getDistritos'])->middleware(['auth', 'verified']);
@@ -155,8 +155,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/reportes', [ReporteContabilidadController::class, 'index']);
     Route::get('/anio-contable', [AnioContableController::class, 'index']);
 });
-Route::get('/Atendance',[RRHHController::class,'Attendance'])->name('Asistencia');
-Route::get('/RRHH/Asistencia/Form',[RRHHController::class, ' FormularioAsistencia']);
+Route::get('/Atendance',[RRHHController::class,'Attendance'])->middleware('auth')->name('Asistencia');
+Route::post('/RRHH/Asistencia/Form',[RRHHController::class, 'FormularioAsistencia'])->middleware('auth');
 
 require __DIR__.'/auth.php';
 

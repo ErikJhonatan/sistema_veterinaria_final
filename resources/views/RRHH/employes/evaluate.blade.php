@@ -6,7 +6,7 @@
     <h1 class="m-0 text-dark"><i class="fas fa-box-open"></i> Evaluar Empleado</h1>
 @stop
 @section('content')
-<form action="{{ route('EvaluateEmploye') }}" method="post">
+<form action="{{ route('EvaluateEmployeForm') }}" method="post">
     @csrf
     <input type="hidden" value="{{ $Employe->id }}" name="id">
     <div class="card-body">

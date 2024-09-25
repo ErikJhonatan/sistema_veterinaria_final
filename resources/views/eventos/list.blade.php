@@ -55,9 +55,9 @@ $config = [
                         <a href="{{url('evento')}}" class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit">
                             <i class="fa fa-lg fa-fw fa-pen"></i>
                         </a>
-                        <a href="{{ route('evento.destroy', $eve->id) }}" class="delete btn btn-xs btn-default text-danger mx-1 shadow" title="Eliminar">
+                        <form method="POST" action="{{ route('evento.destroy', $eve->id) }}" class="d-inline">@csrf @method('DELETE')<button type="submit" class="delete btn btn-xs btn-default text-danger mx-1 shadow" title="Eliminar" aria-label="Eliminar">
                             <i class="fa fa-lg fa-fw fa-trash"></i>
-                        </a>
+                        </button></form>
                     </td>
                 </tr>
                 @endforeach
