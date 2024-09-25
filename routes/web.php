@@ -30,6 +30,13 @@ use App\Http\Controllers\StocksController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CuadrarCajaController;
 use App\Http\Controllers\RRHHController;
+use App\Http\Controllers\TransaccionContable\AnioContableController;
+use App\Http\Controllers\TransaccionContable\CapitalController;
+use App\Http\Controllers\TransaccionContable\CompraController;
+use App\Http\Controllers\TransaccionContable\EquipoController;
+use App\Http\Controllers\TransaccionContable\GastoController;
+use App\Http\Controllers\TransaccionContable\IngresoController;
+use App\Http\Controllers\TransaccionContable\ReporteContabilidadController;
 use App\Http\Services\PermisoService;
 use Illuminate\Support\Facades\Auth;
 
@@ -140,6 +147,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/clienteGraf',[ClienteController::class,'getGrafico'])->middleware(['auth', 'verified']);
     Route::get('/mascotaGraf',[MascotaController::class,'getGrafico'])->middleware(['auth', 'verified']);
 
+    Route::resource('/ingresos', IngresoController::class);
+    Route::resource('/compras', CompraController::class);
+    Route::resource('/gastos', GastoController::class);
+    Route::resource('/capital', CapitalController::class);
+    Route::resource('/equipos', EquipoController::class);
+    Route::get('/reportes', [ReporteContabilidadController::class, 'index']);
+    Route::get('/anio-contable', [AnioContableController::class, 'index']);
 });
 Route::get('/Atendance',[RRHHController::class,'Attendance'])->name('Asistencia');
 Route::get('/RRHH/Asistencia/Form',[RRHHController::class, ' FormularioAsistencia']);

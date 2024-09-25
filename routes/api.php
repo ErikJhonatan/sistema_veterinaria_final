@@ -12,6 +12,9 @@ use App\Http\Controllers\PermisoController;
 use App\Http\Controllers\PermisoRolController;
 use App\Http\Controllers\ProductoGaleriaController;
 use App\Http\Controllers\RolController;
+use App\Http\Controllers\TransaccionContable\EquipoController;
+use App\Http\Controllers\TransaccionContable\IngresoController;
+use App\Http\Controllers\TransaccionContable\ReporteContabilidadController;
 use App\Http\Controllers\TratamientoMascotaController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -92,6 +95,10 @@ Route::prefix('permisos')->group(function () {
     Route::get('', [PermisoController::class, 'findAll']);
 });
 
-
-
-
+Route::prefix('contabilidad')->group(function () {
+    Route::apiResource('ingreso', IngresoController::class);
+    Route::apiResource('equipo', EquipoController::class);
+    Route::get('reporte/estado-resultados', [ReporteContabilidadController::class, 'estadoResultados']);
+    Route::get('reporte/balance-general', [ReporteContabilidadController::class, 'balanceGeneral']);
+    Route::get('reporte/flujo-efectivo', [ReporteContabilidadController::class, 'flujoEfectivo']);
+});
