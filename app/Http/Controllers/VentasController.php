@@ -6,6 +6,7 @@ use App\Config\PermisosValue;
 use App\Http\Services\MovimientoService;
 use App\Http\Services\PermisoService;
 use App\Models\Venta;
+use App\Http\Services\TransaccionContable\TransaccionContableService as TransaccionService;
 use App\Models\VentaItem;
 use App\Models\Almacen;
 use App\Models\Cliente;
@@ -25,6 +26,13 @@ use Illuminate\Support\Facades\DB;
 
 class VentasController extends Controller
 {
+
+    protected $transaccionService;
+
+    public function __construct(TransaccionService $transaccionService)
+    {
+        $this->transaccionService = $transaccionService;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -62,9 +70,9 @@ class VentasController extends Controller
         $items      = $productos->concat($servicios);
 
         return view('ventas.create', [
-            'almacenes' => $almacenes, 
-            'clientes' => $clientes, 
-            'mascotas' => $mascotas, 
+            'almacenes' => $almacenes,
+            'clientes' => $clientes,
+            'mascotas' => $mascotas,
             'items' => $items,
             'tiposComprobantes' => $tiposComprobantes
         ]);
@@ -75,7 +83,7 @@ class VentasController extends Controller
      */
     public function store(Request $request)
     {
-      
+
         DB::beginTransaction();
         try {
             //code...
@@ -145,7 +153,7 @@ class VentasController extends Controller
                     if ($tipo == 'servicio') {
                         $datos_item['servicio_id'] = $item->id;
                     }
-                    
+
                     $datos_item['mascota_id'] = $item->mascota_id && $item->mascota_id !== 'undefined' ? $item->mascota_id : null;
                     $datos_item['subtotal'] = $item->subtotal;
                     $datos_item['impuestos'] = $item->impuestos;
@@ -185,6 +193,7 @@ class VentasController extends Controller
             $comprobante->anulado = 0;
 
             $comprobante->save();
+            $this->registrarVentaContabilidad($venta);
 
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -234,6 +243,26 @@ class VentasController extends Controller
         $venta->delete();
 
         return redirect()->back()->with('msg', 'Venta eliminada correctamente.');
+    }
+
+    public function registrarVentaContabilidad($venta)
+    {
+
+        $client_id = $venta->cliente_id;
+        $cliente = Cliente::find($client_id);
+        $total = $venta->total;
+
+        $transaccion = $this->transaccionService->crearTransaccionContable([
+            'tipo_transaccion' => 'ingreso_venta',
+            'fecha' => Carbon::now(),
+            'monto' => $total,
+            'forma_pago' => 'efectivo',
+            'metodo_pago' => 'efectivo',
+            'concepto' => 'Venta de productos y servicios al cliente ' . $cliente->Nombre . ' ' . $cliente->Apellido,
+            'descripcion' => 'Venta de productos y servicios al cliente ' . $cliente->Nombre . ' ' . $cliente->Apellido,
+            'cuenta_debito_id' => 2,
+            'cuenta_credito_id' => 34,
+        ]);
     }
 
     // Gráficos de ventas
