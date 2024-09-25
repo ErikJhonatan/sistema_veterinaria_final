@@ -108,8 +108,13 @@
                 },
                 body: JSON.stringify({ type: type, qr_code: qrCodeData })
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) throw new Error('No se pudo registrar la asistencia');
+                if (response.redirected) { window.location.assign(response.url); return null; }
+                return response.json();
+            })
             .then(data => {
+                if (!data) return;
                 if (data.success) {
                     document.getElementById('message').textContent = data.message;
                 } else {

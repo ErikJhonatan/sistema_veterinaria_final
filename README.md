@@ -24,3 +24,7 @@ El README anterior indicaba una carga de `database/banco/data.sql` y el comando 
 ## Estado
 
 Proyecto académico con varios módulos de negocio. La descripción se basa en inspección de código y no acredita un despliegue ni pruebas aprobadas. La versión `sistema-veterinaria` conserva diferencias y un archivo SQL propio; no es una copia idéntica.
+
+## Cambios de comportamiento
+
+Las eliminaciones de eventos, áreas, bonificaciones y deducciones usan formularios DELETE con CSRF; los anteriores enlaces GET ya no eliminan datos. La asistencia requiere autenticación y su registro usa POST. `comprobantes.pdf` conserva la URL canónica y la URL anterior usa el nombre `comprobantes.pdf.legacy`.
